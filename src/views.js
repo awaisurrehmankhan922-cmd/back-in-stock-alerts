@@ -85,6 +85,7 @@ function outcomeText(e) {
   if (!e.outcome) return e.verified_qty == null ? 'Processing' : '';
   try {
     const o = JSON.parse(e.outcome);
+    if (o.ignored) return 'Sell-out notice (quantity 0): nothing to do';
     if (!o.verified_quantity) return 'Ignored: stock API says sold out (phantom or already gone)';
     const parts = [];
     if (o.notified) parts.push(`${o.notified} notified`);
@@ -128,7 +129,7 @@ ${requests.map((r) => `<tr><td>${fmt(r.created_at)}</td><td>${esc(r.email)}</td>
 <div class="pager">${page > 1 ? `<a href="${q(filter, page - 1)}">Newer</a>` : ''}${hasMore ? `<a href="${q(filter, page + 1)}">Older</a>` : ''}</div>
 <h2>Recent stock webhooks</h2>
 <div class="card"><table><thead><tr><th>Received</th><th>Event</th><th>SKU</th><th>Claimed qty</th><th>Verified qty</th><th>Outcome</th></tr></thead><tbody>
-${events.map((e) => `<tr><td>${fmt(e.received_at)}</td><td><code>${esc(e.event_id)}</code></td><td><code>${esc(e.sku)}</code></td><td>${e.quantity}</td><td>${e.verified_qty ?? '<span class="muted">…</span>'}</td><td class="wrap small muted">${esc(outcomeText(e))}</td></tr>`).join('') || '<tr><td colspan="6" class="muted">None yet.</td></tr>'}
+${events.map((e) => `<tr><td>${fmt(e.received_at)}</td><td><code>${esc(e.event_id)}</code></td><td><code>${esc(e.sku)}</code></td><td>${e.quantity}</td><td>${e.verified_qty ?? (e.outcome ? '<span class="muted">n/a</span>' : '<span class="muted">…</span>')}</td><td class="wrap small muted">${esc(outcomeText(e))}</td></tr>`).join('') || '<tr><td colspan="6" class="muted">None yet.</td></tr>'}
 </tbody></table></div>
 <p class="muted small" style="margin-top:28px">Embed the form anywhere with <code>&lt;iframe src="/embed?sku=SKU" width="100%" height="420" style="border:0"&gt;&lt;/iframe&gt;</code>. Store: ${esc(config.storeName)}.</p>
 </main></body></html>`;
