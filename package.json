@@ -1,0 +1,14 @@
+{
+  "name": "back-in-stock-alerts",
+  "version": "1.0.0",
+  "description": "Back-in-stock email alerts: embeddable form, verified stock webhooks, exactly-once notifications, admin.",
+  "private": true,
+  "type": "commonjs",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "start": "node --no-warnings=ExperimentalWarning src/server.js",
+    "dev": "node --no-warnings=ExperimentalWarning --watch src/server.js",
+    "test": "node --no-warnings=ExperimentalWarning --test test/*.test.js"
+  },
+  "license": "MIT"
+}
